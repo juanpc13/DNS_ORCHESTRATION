@@ -1,0 +1,14 @@
+ 
+#Comando para crear red en docker
+docker network create reddns
+docker network connect reddns atol
+docker network connect reddns torreja
+docker network inspect reddns
+
+#run prueba
+docker run --name atol --privileged --hostname atol --rm -i -t debian:bullseye bash
+docker run --name torreja --privileged --hostname torreja --rm -i -t debian:bullseye bash
+
+#construccion
+docker build -t atol:1.8 .
+docker run --name atol --privileged --hostname atol -p 53:53 --rm -i -t atol:1.8 bash
