@@ -4,7 +4,9 @@ FROM debian:bullseye
 
 # Actualizando repositario y agregando paquetes para dns
 RUN apt update 
-RUN apt install -y bind9 bind9utils bind9-doc
+RUN apt install -y bind9 bind9utils bind9-doc iproute2 miredo procps
+RUN sysctl net.ipv6.conf.all.disable_ipv6=0 && sysctl net.ipv6.conf.default.disable_ipv6=0 && sysctl net.ipv6.conf.lo.disable_ipv6=0
+RUN service miredo restart
 
 #Editando configuraciones de archivos de local y zona
 

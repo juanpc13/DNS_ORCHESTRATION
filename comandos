@@ -12,3 +12,4 @@ docker run --name torreja --privileged --hostname torreja --rm -i -t debian:bull
 #construccion
 docker build -t atol:1.8 .
 docker run --name atol --privileged --hostname atol -p 53:53 --rm -i -t atol:1.8 bash
+docker run --name torreja --privileged --hostname torreja -p 54:54 --rm -i -t torreja:1.0 bash
