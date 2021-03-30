@@ -1,15 +1,21 @@
- 
-#Comando para crear red en docker
-docker network create reddns
-docker network connect reddns atol
-docker network connect reddns torreja
-docker network inspect reddns
-
-#run prueba
-docker run --name atol --privileged --hostname atol --rm -i -t debian:bullseye bash
-docker run --name torreja --privileged --hostname torreja --rm -i -t debian:bullseye bash
-
 #construccion
-docker build -t atol:1.8 .
-docker run --name atol --privileged --hostname atol -p 53:53 --rm -i -t atol:1.8 bash
-docker run --name torreja --privileged --hostname torreja -p 54:54 --rm -i -t torreja:1.0 bash
+docker build -t atol:4.1 .
+docker build -t torreja:4.1 .
+ 
+#run prueba
+docker run --name atol --privileged --hostname atol -v "$PWD"/db.atol.com:/etc/bind/db.atol.com --env-file dns.env -e ipEsclavo=172.20.0.3 -p 53:53 --rm -i -t atol:4.1
+
+docker run --name torreja --privileged --hostname torreja -v "$PWD"/db.torreja.com:/etc/bind/db.torreja.com --env-file dns.env -e ipEsclavo=172.20.0.2 -p 54:53 --rm -i -t torreja:4.1
+
+#Comando para crear red en docker
+docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 red-dns
+docker network connect --ip 172.20.0.2 red-dns atol
+docker network connect --ip 172.20.0.3 red-dns torreja
+docker network inspect red-dns
+
+#se detienen
+docker exec atol ipEsclavo=172.20.0.25 && /root/update-dns.sh
+docker exec torreja ipEsclavo=172.20.0.25 && /root/update-dns.sh
+
+
+

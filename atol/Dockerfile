@@ -17,7 +17,6 @@ ip -6 addr show teredo | grep -m 1 global' > /root/initipv6.sh
 RUN echo '\n\
 #!/bin/sh\n\
 echo -e ${NamedConfLocal//ipEsclavo/$ipEsclavo} > /etc/bind/named.conf.local\n\
-echo $DbAtolCom > /etc/bind/db.atol.com\n\
 /usr/sbin/named -g -c /etc/bind/named.conf -u bind' > /root/update-dns.sh
 
 # Script para variables de entorno en named.config.local y db.atol.com
