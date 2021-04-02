@@ -16,5 +16,3 @@ $TTL    86400
 ; Los registros para direcciones
 ns1     IN      A       34.68.172.16
 www     IN      A       34.68.172.16
-
-

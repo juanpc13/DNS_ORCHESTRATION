@@ -1,11 +1,17 @@
-#construccion
-docker build -t atol:4.1 .
-docker build -t torreja:4.1 .
- 
-#run prueba
-docker run --name atol --privileged --hostname atol -v "$PWD"/db.atol.com:/etc/bind/db.atol.com --env-file dns.env -e ipEsclavo=172.20.0.3 -p 53:53 --rm -i -t atol:4.1
+#Datos Generales de la IPV6 Global
+# atol usa puerto 53
+# torrjea usa puerto 54
+atol=2001:0:53aa:64c:2462:550f:41a8:fe7d
+torreja=2001:0:53aa:64c:18b3:2566:ddbb:53ef
 
-docker run --name torreja --privileged --hostname torreja -v "$PWD"/db.torreja.com:/etc/bind/db.torreja.com --env-file dns.env -e ipEsclavo=172.20.0.2 -p 54:53 --rm -i -t torreja:4.1
+#construccion
+docker build -t atol:1.0 .
+docker build -t torreja:1.0 .
+
+#run prueba
+docker run --name atol --hostname atol -v "$PWD"/db.atol.com:/etc/bind/db.atol.com --env-file dns.env -e ipEsclavo=$torreja -p "[$atol]":53:53 --rm -i -t atol:1.0
+
+docker run --name torreja --hostname torreja -v "$PWD"/db.torreja.com:/etc/bind/db.torreja.com --env-file dns.env -e ipEsclavo=$atol -p "[$torreja]":54:53 --rm -i -t torreja:1.0
 
 #Comando para crear red en docker
 docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 red-dns
