@@ -15,20 +15,15 @@ docker build -t torreja:1.0 .
 #run prueba
 docker run --name atol --hostname atol -v "$PWD"/db.atol.com:/etc/bind/db.atol.com \
 --env-file dns.env -e ipEsclavo=$torreja --publish 53:53/udp --publish 53:53/tcp --publish 127.0.0.1:953:953/tcp \
---rm -it atol:1.2
+--rm -it atol:1.0
 
 docker run --name torreja --hostname torreja -v "$PWD"/db.torreja.com:/etc/bind/db.torreja.com \
---env-file dns.env -e ipEsclavo=$atol -p 53:53 --rm -it torreja:1.0
+--env-file dns.env -e ipEsclavo=$atol --publish 53:53/udp --publish 53:53/tcp --publish 127.0.0.1:953:953/tcp \
+--rm -it torreja:1.0
 
 #Comando para crear red en docker
 docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 red-dns
 docker network connect --ip 172.20.0.2 red-dns atol
 docker network connect --ip 172.20.0.3 red-dns torreja
 docker network inspect red-dns
-
-#se detienen
-docker exec atol ipEsclavo=172.20.0.25 && /root/update-dns.sh
-docker exec torreja ipEsclavo=172.20.0.25 && /root/update-dns.sh
-
-
 
