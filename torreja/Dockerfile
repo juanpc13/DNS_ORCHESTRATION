@@ -11,6 +11,6 @@ echo -e ${NamedConfLocal//ipEsclavo/$ipEsclavo} > /etc/bind/named.conf.local\n\
 /usr/sbin/named -g -c /etc/bind/named.conf -u bind\n\
 /bin/bash' > /root/update-dns.sh
 
-EXPOSE 53/tcp 53/udp
+EXPOSE 53/tcp 53/udp 953/tcp
 
 ENTRYPOINT ["/bin/bash", "/root/update-dns.sh"]

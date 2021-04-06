@@ -5,8 +5,8 @@
 atol=35.225.89.211
 torreja=34.68.172.16
 #IPV6
-#atol=2001:0:53aa:64c:1465:17fd:dc1e:a62c
-#torreja=2001:0:53aa:64c:18b3:2566:ddbb:53ef
+atol=2001:0:53aa:64c:24d0:7218:dc1e:a62c
+torreja=2001:0:53aa:64c:18b3:2566:ddbb:53ef
 
 #construccion
 docker build -t atol:1.0 .
@@ -14,11 +14,11 @@ docker build -t torreja:1.0 .
 
 #run prueba
 docker run --name atol --hostname atol -v "$PWD"/db.atol.com:/etc/bind/db.atol.com \
---env-file dns.env -e ipEsclavo=$torreja --publish 53:53/udp --publish 53:53/tcp --publish 127.0.0.1:953:953/tcp \
+--env-file dns.env -e ipEsclavo=$torreja --publish 53:53/udp --publish 53:53/tcp \
 --rm -it atol:1.0
 
 docker run --name torreja --hostname torreja -v "$PWD"/db.torreja.com:/etc/bind/db.torreja.com \
---env-file dns.env -e ipEsclavo=$atol --publish 53:53/udp --publish 53:53/tcp --publish 127.0.0.1:953:953/tcp \
+--env-file dns.env -e ipEsclavo=$atol --publish 53:53/udp --publish 53:53/tcp \
 --rm -it torreja:1.0
 
 #Comando para crear red en docker
