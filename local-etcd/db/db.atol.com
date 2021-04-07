@@ -14,5 +14,7 @@ $TTL    86400
 @       IN      NS      ns1.atol.com.
 
 ; Los registros para direcciones
-ns1     IN      A       34.68.172.16
-www     IN      A       34.68.172.16
+ns1     IN      A       190.87.1.130
+www     IN      A       190.87.1.130
+
+
