@@ -18,7 +18,7 @@ named-checkzone torreja.com /etc/bind/db.torreja.com\n\
 /bin/bash' > /root/update-dns.sh
 
 # etcd
-EXPOSE 2379/tcp 2380/tcp
+EXPOSE 2379 2380
 
 # Bind9
 EXPOSE 53/tcp 53/udp
