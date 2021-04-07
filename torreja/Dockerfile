@@ -10,7 +10,7 @@ ENV ETCDCTL_API=3
 
 # Script para variables de entorno en named.config.local
 RUN echo '#!/bin/sh\n\
-etcd --listen-client-urls="$cluster" --advertise-client-urls="$cluster"\n\
+$etcd_cmd\n\
 etcdctl get torreja_local --print-value-only | base64 --decode > /etc/bind/named.conf.local\n\
 etcdctl get torreja_db --print-value-only | base64 --decode > /etc/bind/db.torreja.com\n\
 named-checkzone torreja.com /etc/bind/db.torreja.com\n\
@@ -18,7 +18,7 @@ named-checkzone torreja.com /etc/bind/db.torreja.com\n\
 /bin/bash' > /root/update-dns.sh
 
 # etcd
-EXPOSE 2379/tcp
+EXPOSE 2379/tcp 2380/tcp
 
 # Bind9
 EXPOSE 53/tcp 53/udp
