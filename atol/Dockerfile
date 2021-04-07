@@ -18,7 +18,7 @@ named-checkzone atol.com /etc/bind/db.atol.com\n\
 /bin/bash' > /root/update-dns.sh
 
 # etcd
-EXPOSE 2379
+EXPOSE 2379/tcp
 
 # Bind9
 EXPOSE 53/tcp 53/udp

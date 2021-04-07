@@ -1,9 +1,8 @@
 #Datos Generales
 #IPV4
-local=190.87.1.130
-atol=35.225.89.211
-torreja=34.68.172.16
-cluster="http://$local:2379,http://$atol:2379,http://$torreja:2379"
+local=35.225.89.211
+atol=34.68.172.16
+cluster="http://$local:2379,http://$atol:2379"
 
 #ETCD
 export ETCDCTL_API=3
