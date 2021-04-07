@@ -10,7 +10,7 @@ ENV ETCDCTL_API=3
 
 # Script para variables de entorno en named.config.local
 RUN echo '#!/bin/sh\n\
-etcd --listen-client-urls=http://$MAIN_IP:2379 --advertise-client-urls=http://$MAIN_IP:2379\n\
+etcd --listen-client-urls="$cluster" --advertise-client-urls="$cluster"\n\
 etcdctl get atol_local --print-value-only | base64 --decode > /etc/bind/named.conf.local\n\
 etcdctl get atol_db --print-value-only | base64 --decode > /etc/bind/db.atol.com\n\
 named-checkzone atol.com /etc/bind/db.atol.com\n\
