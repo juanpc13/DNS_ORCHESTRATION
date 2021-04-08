@@ -10,11 +10,9 @@ ENV ETCDCTL_API=3
 
 # Script para variables de entorno en named.config.local
 RUN echo '#!/bin/sh\n\
-$etcd_cmd\n\
+$etcd_cmd &\n\
 etcdctl get atol_local --print-value-only | base64 --decode > /etc/bind/named.conf.local\n\
 etcdctl get atol_db --print-value-only | base64 --decode > /etc/bind/db.atol.com\n\
-named-checkzone atol.com /etc/bind/db.atol.com\n\
-/usr/sbin/named -g -c /etc/bind/named.conf -u bind\n\
 /bin/bash' > /root/update-dns.sh
 
 # etcd
