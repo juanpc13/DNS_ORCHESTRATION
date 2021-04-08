@@ -24,4 +24,6 @@ etcdctl put torreja_local "$torreja_local"\n\
 etcdctl put torreja_db "$torreja_db"\n\
 bash' > run-etcd.sh
 
+EXPOSE 2379 2380
+
 ENTRYPOINT ["/bin/bash", "run-etcd.sh"]

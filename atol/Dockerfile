@@ -23,4 +23,7 @@ named-checkzone atol.com /etc/bind/db.atol.com\n\
 # Bind9
 EXPOSE 53/tcp 53/udp
 
+# etcd
+EXPOSE 2379 2380
+
 ENTRYPOINT ["/bin/bash", "update-dns.sh"]
