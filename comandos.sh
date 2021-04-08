@@ -4,18 +4,19 @@ docker network inspect red-dns
 
 #Datos Generales
 #IPV4
-atol=172.20.0.2
+atol=192.168.2.76
+#atol=172.20.0.2
 #atol=34.68.172.16
 torreja=172.20.0.3
 #torreja=34.72.150.183
-vm=172.20.0.4
+vm=192.168.2.1
+#vm=172.20.0.4
 #vm=34.68.214.22
 
 #Comandos para agreagar nodo
 etcdctl member list
 etcdctl member add atol --peer-urls=http://$atol:2380
 etcdctl member add torreja --peer-urls=http://$torreja:2380
-
 
 #Correr el nodo vm
 # vm
