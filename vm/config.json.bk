@@ -1,0 +1,26 @@
+{
+    "advertise_addr": "$CURRENT_IP",
+    "bind_addr": "$CURRENT_IP",
+    "client_addr": "0.0.0.0",
+    "datacenter": "Protocolos",
+    "data_dir": "$DATA_DIR",
+    "domain": "consul",
+    "enable_script_checks": true,
+    "dns_config": {
+        "enable_truncate": true,
+        "only_passing": true
+    },
+    "enable_syslog": true,
+    "encrypt": "$ENCRYPT",
+    "leave_on_terminate": true,
+    "log_level": "INFO",
+    "rejoin_after_leave": true,
+    "retry_join": [
+     $CLUSTER_JOIN
+    ],
+    "server": true,
+    "start_join": [
+        $CLUSTER_JOIN
+    ],
+    "ui": true
+}
