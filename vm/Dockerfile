@@ -14,14 +14,14 @@ ENV ENCRYPT="qKWxUbmRyJnIPbRK2bmhKqP/1CQQ0whXncHhhFHX8E0="
 # Directorio Principal
 WORKDIR /root
 # Directorios de consul
-RUN mkdir DATA_DIR CONFIG_DIR
+RUN mkdir $DATA_DIR $CONFIG_DIR
 
 # Script inicar servicio consul
 RUN echo '#!/bin/bash\n\
-envsubst < "config.json.bk" > $CONFIG_DIR/config.json\n\
-consul agent -node=vm -server -ui -advertise=$VM_IP -bind=$VM_IP -data-dir=$DATA_DIR -config-dir=$CONFIG_DIR \n\
-consul kv put atol_local @local/named.conf.local.atol\n\
-consul kv put atol_db @db/db.atol.com\n\
+envsubst < "files/config.json.bk" > $CONFIG_DIR/config.json\n\
+consul agent -node=vm -server -ui -advertise=$VM_IP -bind=$VM_IP -data-dir=$DATA_DIR -config-dir=$CONFIG_DIR --bootstrap-expect 1 & \n\
+consul kv put atol_local @files/local/named.conf.local.atol\n\
+consul kv put atol_db @files/db/db.atol.com\n\
 bash' > run-cluster.sh
 
 # Consul ports

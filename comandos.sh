@@ -13,7 +13,7 @@ export CLUSTER_JOIN="\"$VM_IP\", \"$ATOL_IP\""
 # vm
 docker rmi vm:1.0 .
 docker build -t vm:1.0 .
-docker run --name vm --hostname vm --net red-dns --ip $VM_IP -v "$PWD":/root/db -v "$PWD":/root/local \
+docker run --name vm --hostname vm --net red-dns --ip $VM_IP -v "$PWD"/files:/root/files \
 -e VM_IP="$VM_IP" -e ATOL_IP="$ATOL_IP" -e CLUSTER_JOIN="$CLUSTER_JOIN" -e CURRENT_IP="$VM_IP" \
 --rm -it vm:1.0
 
