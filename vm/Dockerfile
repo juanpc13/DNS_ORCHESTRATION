@@ -3,7 +3,7 @@ FROM debian:bullseye
 
 # Actualizando repositario y agregando paquetes para dns
 RUN apt update
-RUN apt install -y iproute2 iputils-ping consul
+RUN apt install -y iproute2 iputils-ping gettext consul
 
 # Configuraciones de consul
 ENV DATA_DIR=data-dir
@@ -19,7 +19,8 @@ RUN mkdir $DATA_DIR $CONFIG_DIR
 # Script inicar servicio consul
 RUN echo '#!/bin/bash\n\
 envsubst < "files/config.json.bk" > $CONFIG_DIR/config.json\n\
-consul agent -node=vm -server -ui -advertise=$VM_IP -bind=$VM_IP -data-dir=$DATA_DIR -config-dir=$CONFIG_DIR --bootstrap-expect 1 & \n\
+consul agent -node=vm -bootstrap-expect 1 -config-dir=$CONFIG_DIR &\n\
+sleep 5\n\
 consul kv put atol_local @files/local/named.conf.local.atol\n\
 consul kv put atol_db @files/db/db.atol.com\n\
 bash' > run-cluster.sh

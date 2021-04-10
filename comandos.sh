@@ -15,15 +15,15 @@ docker rmi vm:1.0 .
 docker build -t vm:1.0 .
 docker run --name vm --hostname vm --net red-dns --ip $VM_IP -v "$PWD"/files:/root/files \
 -e VM_IP="$VM_IP" -e ATOL_IP="$ATOL_IP" -e CLUSTER_JOIN="$CLUSTER_JOIN" -e CURRENT_IP="$VM_IP" \
---rm -it vm:1.0
+--publish 8500:8500 --rm -it vm:1.0
 
 # Correr los contenedores con las variables de entorno
 # atol
 docker rmi atol:1.0 .
 docker build -t atol:1.0 .
-docker run --name atol --hostname atol --net red-dns --ip $atol \
---publish 53:53/udp --publish 53:53/tcp \
---rm -it atol:1.0
+docker run --name atol --hostname atol --net red-dns --ip $ATOL_IP \
+-e VM_IP="$VM_IP" -e ATOL_IP="$ATOL_IP" -e CLUSTER_JOIN="$CLUSTER_JOIN" -e CURRENT_IP="$ATOL_IP" \
+--publish 53:53/udp --publish 53:53/tcp --rm -it atol:1.0
 
 # torreja
 docker rmi torreja:1.0 .

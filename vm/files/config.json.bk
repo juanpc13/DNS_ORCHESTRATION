@@ -10,7 +10,7 @@
         "enable_truncate": true,
         "only_passing": true
     },
-    "enable_syslog": true,
+    "enable_syslog": false,
     "encrypt": "$ENCRYPT",
     "leave_on_terminate": true,
     "log_level": "INFO",
