@@ -3,24 +3,50 @@ FROM debian:bullseye
 
 # Actualizando repositario y agregando paquetes para dns
 RUN apt update
-RUN apt install -y bind9 bind9utils bind9-doc etcd
+RUN apt install -y bind9 bind9utils bind9-doc iproute2 iputils-ping gettext consul
 
-# Variable de entorno para usar etcdctl
-ENV ETCDCTL_API=3
+# Configuraciones de consul
+ENV DATA_DIR=data-dir
+ENV CONFIG_DIR=config-dir
+# ./consul keygen
+ENV ENCRYPT="qKWxUbmRyJnIPbRK2bmhKqP/1CQQ0whXncHhhFHX8E0="
+
+# Directorio de trabajo
+WORKDIR /root
+# Directorios de consul
+RUN mkdir $DATA_DIR $CONFIG_DIR
+
+# Archivo de Plantilla para configuraciones
+RUN echo '{"advertise_addr": "$CURRENT_IP","bind_addr": "$CURRENT_IP","client_addr": "0.0.0.0",\
+"datacenter": "Protocolos","data_dir": "$DATA_DIR","domain": "consul","enable_script_checks": true,\
+"dns_config": {"enable_truncate": true,"only_passing": true},"enable_syslog": false,"encrypt": "$ENCRYPT",\
+"leave_on_terminate": true,"log_level": "INFO","rejoin_after_leave": true,"retry_join": [$CLUSTER_JOIN],\
+"server": true,"start_join": [$CLUSTER_JOIN],"ui": true}' > config.json.bk
 
 # Script para variables de entorno en named.config.local
-RUN echo '#!/bin/sh\n\
-etcdctl get torreja_local --print-value-only | base64 --decode > /etc/bind/named.conf.local\n\
-etcdctl get torreja_db --print-value-only | base64 --decode > /etc/bind/db.torreja.com\n\
+RUN echo '#!/bin/bash\n\
+envsubst < "config.json.bk" > $CONFIG_DIR/config.json\n\
+consul agent -node=torreja -config-dir=$CONFIG_DIR &\n\
+sleep 5\n\
+consul kv get torreja_local > /etc/bind/named.conf.local\n\
+consul kv get torreja_db > /etc/bind/db.torreja.com\n\
 named-checkzone torreja.com /etc/bind/db.torreja.com\n\
-/usr/sbin/named -g -c /etc/bind/named.conf -u bind\n\
-/bin/bash' > /root/update-dns.sh
+/usr/sbin/named -g -c /etc/bind/named.conf -u bind &\n\
+consul watch -type=key -key=torreja_local sh /root/reload-dns.sh\n\
+consul watch -type=key -key=torreja_db sh /root/reload-dns.sh\n\
+/bin/bash' > update-dns.sh
 
-# etcd
-EXPOSE 2379 2380
+# Script para variables de entorno en named.config.local
+RUN echo '#!/bin/bash\n\
+consul kv get torreja_local > /etc/bind/named.conf.local\n\
+consul kv get torreja_db > /etc/bind/db.torreja.com\n\
+named-checkzone torreja.com /etc/bind/db.torreja.com\n\
+/usr/sbin/rndc reload' > reload-dns.sh
+
+# Consul ports
+EXPOSE 8300 8500
 
 # Bind9
 EXPOSE 53/tcp 53/udp
 
-ENTRYPOINT ["/bin/bash", "$etcd_cmd"]
-ENTRYPOINT ["/bin/bash", "/root/update-dns.sh"]
+ENTRYPOINT ["/bin/bash", "update-dns.sh"]
