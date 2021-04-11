@@ -32,14 +32,13 @@ consul kv get atol_local > /etc/bind/named.conf.local\n\
 consul kv get atol_db > /etc/bind/db.atol.com\n\
 named-checkzone atol.com /etc/bind/db.atol.com\n\
 /usr/sbin/named -g -c /etc/bind/named.conf -u bind &\n\
-consul watch -type=key -key=atol_local sh /root/reload-dns.sh\n\
-consul watch -type=key -key=atol_db sh /root/reload-dns.sh\n\
+consul watch -type=keyprefix -prefix=atol/ sh /root/reload-dns.sh &\n\
 /bin/bash' > update-dns.sh
 
 # Script para variables de entorno en named.config.local
 RUN echo '#!/bin/bash\n\
-consul kv get atol_local > /etc/bind/named.conf.local\n\
-consul kv get atol_db > /etc/bind/db.atol.com\n\
+consul kv get atol/local > /etc/bind/named.conf.local\n\
+consul kv get atol/db > /etc/bind/db.atol.com\n\
 named-checkzone atol.com /etc/bind/db.atol.com\n\
 /usr/sbin/rndc reload' > reload-dns.sh
 

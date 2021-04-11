@@ -32,14 +32,13 @@ consul kv get torreja_local > /etc/bind/named.conf.local\n\
 consul kv get torreja_db > /etc/bind/db.torreja.com\n\
 named-checkzone torreja.com /etc/bind/db.torreja.com\n\
 /usr/sbin/named -g -c /etc/bind/named.conf -u bind &\n\
-consul watch -type=key -key=torreja_local sh /root/reload-dns.sh\n\
-consul watch -type=key -key=torreja_db sh /root/reload-dns.sh\n\
+consul watch -type=keyprefix -prefix=torreja/ sh /root/reload-dns.sh\n\
 /bin/bash' > update-dns.sh
 
 # Script para variables de entorno en named.config.local
 RUN echo '#!/bin/bash\n\
-consul kv get torreja_local > /etc/bind/named.conf.local\n\
-consul kv get torreja_db > /etc/bind/db.torreja.com\n\
+consul kv get torreja/local > /etc/bind/named.conf.local\n\
+consul kv get torreja/db > /etc/bind/db.torreja.com\n\
 named-checkzone torreja.com /etc/bind/db.torreja.com\n\
 /usr/sbin/rndc reload' > reload-dns.sh
 
