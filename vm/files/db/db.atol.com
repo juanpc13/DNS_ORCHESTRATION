@@ -16,5 +16,5 @@ $TTL    86400
 ; Los registros para direcciones
 ns1     IN      A       190.87.1.130
 www     IN      A       190.87.1.130
-
+www     IN      AAAA    2001::7
 
