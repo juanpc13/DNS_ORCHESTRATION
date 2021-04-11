@@ -2,7 +2,7 @@ zone "atol.com" {
     type slave;
     file "/var/cache/bind/db.atol.com";
     masters{
-        35.225.89.211;//IP-Slave
+       127.0.0.1;//IP-Slave
     };
 };
 
@@ -11,10 +11,10 @@ zone "torreja.com" {
     type master;
     notify yes;
     allow-transfer  {
-        35.225.89.211;//IP-Slave
+        127.0.0.1;//IP-Slave
     };
     also-notify {
-        35.225.89.211;//IP-Slave
+        127.0.0.1;//IP-Slave
     };
     file "/etc/bind/db.torreja.com";
 };
