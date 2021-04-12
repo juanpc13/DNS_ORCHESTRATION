@@ -28,8 +28,8 @@ RUN echo '#!/bin/bash\n\
 envsubst < "config.json.bk" > $CONFIG_DIR/config.json\n\
 consul agent -node=torreja -config-dir=$CONFIG_DIR &\n\
 sleep 5\n\
-consul kv get torreja_local > /etc/bind/named.conf.local\n\
-consul kv get torreja_db > /etc/bind/db.torreja.com\n\
+consul kv get torreja/local > /etc/bind/named.conf.local\n\
+consul kv get torreja/db > /etc/bind/db.torreja.com\n\
 named-checkzone torreja.com /etc/bind/db.torreja.com\n\
 /usr/sbin/named -g -c /etc/bind/named.conf -u bind &\n\
 consul watch -type=keyprefix -prefix=torreja/ sh /root/reload-dns.sh\n\

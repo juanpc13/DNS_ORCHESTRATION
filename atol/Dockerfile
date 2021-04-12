@@ -28,8 +28,8 @@ RUN echo '#!/bin/bash\n\
 envsubst < "config.json.bk" > $CONFIG_DIR/config.json\n\
 consul agent -node=atol -config-dir=$CONFIG_DIR &\n\
 sleep 5\n\
-consul kv get atol_local > /etc/bind/named.conf.local\n\
-consul kv get atol_db > /etc/bind/db.atol.com\n\
+consul kv get atol/local > /etc/bind/named.conf.local\n\
+consul kv get atol/db > /etc/bind/db.atol.com\n\
 named-checkzone atol.com /etc/bind/db.atol.com\n\
 /usr/sbin/named -g -c /etc/bind/named.conf -u bind &\n\
 consul watch -type=keyprefix -prefix=atol/ sh /root/reload-dns.sh &\n\
